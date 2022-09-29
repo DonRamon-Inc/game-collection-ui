@@ -1,0 +1,17 @@
+name: Pull Request
+
+on: pull_request
+
+jobs:
+  pylint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Configurar Node.js v16.15.1
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.15.1
+    - name: Instalar dependências
+      run: npm install
+    - name: Analisando código com ESLint
+      run: npx eslint "src/**/*.{js,jsx}"
