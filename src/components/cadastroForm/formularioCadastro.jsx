@@ -50,25 +50,20 @@ export default function formularioCadastro() {
     data_nascimento: '',
   })
 
-
   async function submit(formData){
     try{
       await Axios.post(`${urlGamecollection}/cadastro`,
       formData)
-      .then(res =>{
-        console.log(res.data);
-        alert('ok')
-      }) 
     }
     catch(err) {
-      console.log(err);
-      console.log(data);
-      console.log('Error: Não foi possível realizar o cadastro');
+      alert('Error: Não foi possível realizar o cadastro');
+      return(err)
     }
+    (alert('Usuário Cadastrado com Sucesso')) 
   }
 
   return (
-
+    
     <Container
       maxWidth="sm"
       style={{
