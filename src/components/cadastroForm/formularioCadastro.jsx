@@ -1,17 +1,36 @@
 import Axios from 'axios';
 import * as Yup from 'yup';
+import moment from 'moment/moment';
+import parse from "date-fns/parse";
+
 import { Formik, Form } from 'formik';
 import { Grid, Container} from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers';
 
 import Textfield from '../formUI/Textfield';
-import DateTimePicker from '../formUI/DateTimePicker';
 import Button from '../formUI/Button'
+import { useState } from 'react';
 
 
 export default function formularioCadastro() {
-
-
   const urlGamecollection = import.meta.env.VITE_GAMECOLLECTION_URL;
+  const [dateValue,setDateValue] = useState(null)
+
+  async function formatarData(dadosFormulario){
+    console.log('entrada: ',dadosFormulario)
+    dadosFormulario.data_nascimento = moment(dadosFormulario.data_nascimento, 'DD-MM-YYYY').format('YYYY-MM-DD');
+    console.log('saída: ',dadosFormulario)
+    return dadosFormulario;
+  }
+  
+  const data = ({
+    nome: '',
+    email: '',
+    confirmacao_email: '',
+    senha: '',
+    confirmacao_senha: '',
+    data_nascimento: dateValue,
+  })
 
   const validacaoFormulario = Yup.object().shape({
     nome: Yup.string().required('Campo obrigatório'),
@@ -37,23 +56,28 @@ export default function formularioCadastro() {
       .required('Campo obrigatório')
       .oneOf([Yup.ref('senha'), null], 'Senhas não coincidem'),
     data_nascimento: Yup.date()
-      .nullable()
+      .transform((value, originalValue) => 
+        parse(originalValue, 'dd/MM/yyyy', new Date())
+      )
       .required('Campo obrigatório')
-  })
+      .typeError('Formato inválido')
+      .min(
+        moment(new Date(), 'yyyy-MM-dd')
+        .subtract(100, 'year')
+        .format('DD/MM/yyyy')
+        ,"Data inválida")
+      .max(
+        moment(new Date(), 'yyyy-MM-dd')
+          .subtract(13, 'year')
+          .format('DD/MM/yyyy')
+        ,"É preciso ter mais de 13 anos para criar uma conta.")
+      })
 
-  const data = ({
-    nome: '',
-    email: '',
-    confirmacao_email: '',
-    senha: '',
-    confirmacao_senha: '',
-    data_nascimento: '',
-  })
-
-  async function submit(formData){
+  async function submit(dadosDoFormulario){
+    
     try{
       await Axios.post(`${urlGamecollection}/cadastro`,
-      formData)
+      dadosDoFormulario)
     }
     catch(err) {
       alert('Error: Não foi possível realizar o cadastro');
@@ -87,7 +111,9 @@ export default function formularioCadastro() {
         }}
         validationSchema={validacaoFormulario}
         onSubmit={values => {
-          submit(values)
+          const dadosDoFormulario = structuredClone(values)
+          formatarData(dadosDoFormulario)
+          submit(dadosDoFormulario);
         }}
       >
         <Form>
@@ -108,7 +134,7 @@ export default function formularioCadastro() {
               >
                 <Grid
                   item
-                  xs={7}
+                  xs={7.5}
                 >
                   <Textfield
                     name="nome"
@@ -118,11 +144,20 @@ export default function formularioCadastro() {
 
                 <Grid
                   item
-                  xs={5}
+                  xs={4.5}
                 >
-                  <DateTimePicker
+                  <DatePicker
                     name="data_nascimento"
                     label="Data de Nascimento:"
+                    inputFormat="dd/MM/yyyy"
+                    maxDate={new Date()}
+                    disableOpenPicker
+                    value={dateValue}
+                    onChange={(newDateValue) => {
+                      setDateValue(newDateValue)
+                      console.log(dateValue)
+                    }}
+                    renderInput={(params) => <Textfield name='data_nascimento' {...params} />}
                   />
                 </Grid>
               </Grid>

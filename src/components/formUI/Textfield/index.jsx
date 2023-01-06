@@ -7,7 +7,6 @@ const TextfieldWrapper = ({
     ...otheProps
 }) => {
     const [field, metaData] = useField(name);
-
     const configTextfield = {
         ...field,
         ...otheProps,

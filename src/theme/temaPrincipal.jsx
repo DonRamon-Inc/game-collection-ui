@@ -46,6 +46,11 @@ export const temaPrincipal = createTheme({
           color: '#B5D3CE'
         }
       }
+    },
+    MuiFormHelperText:{
+      MuiError:{
+        zIndex: 1000
+      }
     }
   }
   
