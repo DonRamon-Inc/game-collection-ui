@@ -2,7 +2,7 @@ import { React } from 'react';
 
 import { ThemeProvider } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 import './App.css'
 
@@ -13,7 +13,7 @@ function App () {
   return (
     <div className='App'>
       <ThemeProvider theme={ temaPrincipal }>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
           <TelaCadastro/>
         </LocalizationProvider>
       </ThemeProvider>
