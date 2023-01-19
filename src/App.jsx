@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { Button, Typography, Box, Container, Link } from '@mui/material'
+import { Typography, Box, Container, Link, Grid } from '@mui/material'
 import reactLogo from './assets/react.svg'
+import { Button } from './components/atoms/Button'
+import { TextField } from './components/atoms/TextField'
 import './App.css'
 
 function App () {
@@ -22,9 +24,15 @@ function App () {
           onClick={() => setCount((count) => count + 1)}
           variant='contained'
           color='info'
+          text={`count is ${count}`}
         >
-          count is {count}
         </Button>
+
+      <Grid>
+        <TextField label='Email' type='email'></TextField>
+        <TextField label='Senha' type='password'></TextField>
+      </Grid>
+      <Button text='Ola'></Button>
         <Typography mt={2}>
           Edit <code>src/App.jsx</code> and save to test HMR
         </Typography>
