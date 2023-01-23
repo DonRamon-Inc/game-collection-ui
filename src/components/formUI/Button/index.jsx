@@ -1,31 +1,35 @@
-import React from "react";
-import { Button } from "@mui/material";
-import { useFormikContext } from "formik";
+import { Button } from '@mui/material'
+import { useFormikContext } from 'formik'
+import PropTypes from 'prop-types'
 
 const ButtonWrapper = ({
-    children,
-    ...otheProps
+  children,
+  ...otheProps
 }) => {
-    const {submitForm} = useFormikContext();
+  const { submitForm } = useFormikContext()
 
-    const handleSubmit = () => {
-        submitForm();
-    }
+  const handleSubmit = () => {
+    submitForm()
+  }
 
-    const configButton = {
-        ...otheProps,
-        variant: 'contained',
-        color: 'secondary',
-        onClick: handleSubmit,
-    };
+  const configButton = {
+    ...otheProps,
+    variant: 'contained',
+    color: 'button',
+    onClick: handleSubmit
+  }
 
-    return (
+  return (
        <Button
        {...configButton}
        >
         {children}
        </Button>
-    );
-};
+  )
+}
 
-    export default ButtonWrapper;
+ButtonWrapper.propTypes = {
+  children: PropTypes.string
+}
+
+export default ButtonWrapper

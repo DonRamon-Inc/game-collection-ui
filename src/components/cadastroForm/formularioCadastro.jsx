@@ -1,35 +1,34 @@
-import Axios from 'axios';
-import * as Yup from 'yup';
-import moment from 'moment/moment';
-import parse from "date-fns/parse";
+import Axios from 'axios'
+import * as Yup from 'yup'
+import moment from 'moment/moment'
+import parse from 'date-fns/parse'
 
-import { Formik, Form } from 'formik';
-import { Grid, Container} from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers';
+import { Formik, Form } from 'formik'
+import { Grid, Container } from '@mui/material'
+import { DatePicker } from '@mui/x-date-pickers'
 
-import Textfield from '../formUI/Textfield';
+import Textfield from '../formUI/Textfield'
 import Button from '../formUI/Button'
-import { useState } from 'react';
+import { useState } from 'react'
 
+export default function formularioCadastro () {
+  const urlGamecollection = import.meta.env.VITE_GAMECOLLECTION_URL
+  const [dateValue, setDateValue] = useState(null)
 
-export default function formularioCadastro() {
-  const urlGamecollection = import.meta.env.VITE_GAMECOLLECTION_URL;
-  const [dateValue,setDateValue] = useState(null)
-
-  async function formatarData(dadosFormulario){
-    console.log('entrada: ',dadosFormulario)
-    dadosFormulario.data_nascimento = moment(dadosFormulario.data_nascimento, 'DD-MM-YYYY').format('YYYY-MM-DD');
-    console.log('saída: ',dadosFormulario)
-    return dadosFormulario;
+  async function formatarData (dadosFormulario) {
+    console.log('entrada: ', dadosFormulario)
+    dadosFormulario.data_nascimento = moment(dadosFormulario.data_nascimento, 'DD-MM-YYYY').format('YYYY-MM-DD')
+    console.log('saída: ', dadosFormulario)
+    return dadosFormulario
   }
-  
+
   const data = ({
     nome: '',
     email: '',
     confirmacao_email: '',
     senha: '',
     confirmacao_senha: '',
-    data_nascimento: dateValue,
+    data_nascimento: dateValue
   })
 
   const validacaoFormulario = Yup.object().shape({
@@ -37,7 +36,7 @@ export default function formularioCadastro() {
     email: Yup.string()
       .required('Campo obrigatório')
       .matches(
-        /^\w+([\.!#$%&'*\/=?^_+\-`{|}~]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        /^\w+([.!#$%&'*/=?^_+\-`{|}~]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
         'Email invalido, favor verificar email'
       ),
     confirmacao_email: Yup.string()
@@ -49,53 +48,51 @@ export default function formularioCadastro() {
         'Senha inválida. Sua senha deve conter entre 8 a 100 caracteres'
       )
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&\+\-_*\/=\\\s'`~´:?<>.,;{}()[\]])[A-Za-z\d!@#$%&\+\-_*\/=\\\s'`~´:?<>.,;{}()[\]]{8,100}$/,
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%&+\-_*/=\\\s'`~´:?<>.,;{}()[\]])[A-Za-z\d!@#$%&+\-_*/=\\\s'`~´:?<>.,;{}()[\]]{8,100}$/,
         'Senha inválida. A senha precisa conter uma combinação de ' +
         'letras (maiscula e minuscula), números e símbolos'),
     confirmacao_senha: Yup.string()
       .required('Campo obrigatório')
       .oneOf([Yup.ref('senha'), null], 'Senhas não coincidem'),
     data_nascimento: Yup.date()
-      .transform((value, originalValue) => 
+      .transform((value, originalValue) =>
         parse(originalValue, 'dd/MM/yyyy', new Date())
       )
       .required('Campo obrigatório')
       .typeError('Formato inválido')
       .min(
         moment(new Date(), 'yyyy-MM-dd')
-        .subtract(100, 'year')
-        .format('DD/MM/yyyy')
-        ,"Data inválida")
+          .subtract(100, 'year')
+          .format('DD/MM/yyyy')
+        , 'Data inválida')
       .max(
         moment(new Date(), 'yyyy-MM-dd')
           .subtract(13, 'year')
           .format('DD/MM/yyyy')
-        ,"É preciso ter mais de 13 anos para criar uma conta.")
-      })
+        , 'É preciso ter mais de 13 anos para criar uma conta.')
+  })
 
-  async function submit(dadosDoFormulario){
-    
-    try{
+  async function submit (dadosDoFormulario) {
+    try {
       await Axios.post(`${urlGamecollection}/cadastro`,
-      dadosDoFormulario)
+        dadosDoFormulario)
+    } catch (err) {
+      alert('Error: Não foi possível realizar o cadastro')
+      return (err)
     }
-    catch(err) {
-      alert('Error: Não foi possível realizar o cadastro');
-      return(err)
-    }
-    (alert('Usuário Cadastrado com Sucesso')) 
+    (alert('Usuário Cadastrado com Sucesso'))
   }
 
   return (
-    
+
     <Container
       maxWidth="sm"
       style={{
         margin: '0px',
         alignItems: 'center',
         padding: '32px',
-        backgroundColor: '#075834',
-        borderRadius: '10px',
+        backgroundColor: '#6241D9',
+        borderRadius: '10px'
       }}
     >
       <h1
@@ -103,7 +100,7 @@ export default function formularioCadastro() {
           color: '#ffffff',
           fontFamily: 'Inter',
           fontWeight: '900',
-          paddingBottom: '32px',
+          paddingBottom: '32px'
         }}>Preencha os campos abaixo:</h1>
       <Formik
         initialValues={{
@@ -113,19 +110,20 @@ export default function formularioCadastro() {
         onSubmit={values => {
           const dadosDoFormulario = structuredClone(values)
           formatarData(dadosDoFormulario)
-          submit(dadosDoFormulario);
+          submit(dadosDoFormulario)
         }}
       >
         <Form>
           <Grid
             item
             container
+            justifyContent="center"
             spacing={7}
           >
             <Grid
               item
               container
-              spacing={3}
+              spacing={4}
             >
               <Grid
                 item
@@ -162,21 +160,21 @@ export default function formularioCadastro() {
                 </Grid>
               </Grid>
 
-              <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Grid item xs={12}>
                 <Textfield
                   name="email"
                   label="Email:"
                 />
               </Grid>
 
-              <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Grid item xs={12}>
                 <Textfield
                   name="confirmacao_email"
                   label="Confirme seu Email:"
                 />
-              </Grid> 
+              </Grid>
 
-              <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Grid item xs={12}>
                 <Textfield
                   name="senha"
                   label="Senha:"
@@ -184,7 +182,7 @@ export default function formularioCadastro() {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Grid item xs={12}>
                 <Textfield
                   name="confirmacao_senha"
                   label="Confirme sua enha:"
@@ -194,13 +192,15 @@ export default function formularioCadastro() {
             </Grid>
             <Grid
               item
+              xs={10}
             >
               <Button
+                fullWidth
                 >Cadastrar</Button>
             </Grid>
           </Grid>
         </Form>
       </Formik>
     </Container>
-  );
+  )
 }
