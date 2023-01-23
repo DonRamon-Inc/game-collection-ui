@@ -1,27 +1,31 @@
-import React from "react";
-import { TextField } from "@mui/material";
-import { useField } from "formik";
+import { TextField } from '@mui/material'
+import { useField } from 'formik'
+import PropTypes from 'prop-types'
 
 const TextfieldWrapper = ({
-    name,
-    ...otheProps
+  name,
+  ...otheProps
 }) => {
-    const [field, metaData] = useField(name);
-    const configTextfield = {
-        ...field,
-        ...otheProps,
-        fullWidth: true,
-        variant: 'outlined'
-    };
+  const [field, metaData] = useField(name)
+  const configTextfield = {
+    ...field,
+    ...otheProps,
+    fullWidth: true,
+    variant: 'outlined'
+  }
 
-    if(metaData && metaData.touched && metaData.error) {
-        configTextfield.error = true;
-        configTextfield.helperText = metaData.error;
-    }
+  if (metaData && metaData.touched && metaData.error) {
+    configTextfield.error = true
+    configTextfield.helperText = metaData.error
+  }
 
-    return (
+  return (
         <TextField {...configTextfield}/>
-    );
-};
+  )
+}
 
-    export default TextfieldWrapper;
+TextfieldWrapper.propTypes = {
+  name: PropTypes.string
+}
+
+export default TextfieldWrapper

@@ -1,1 +1,1 @@
-export * from './temaPrincipal';
+export * from './temaPrincipal'
