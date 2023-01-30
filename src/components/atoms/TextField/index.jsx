@@ -4,9 +4,7 @@ import { PropTypes } from 'prop-types'
 export function TextField ({ label, type }) {
   return (
     <MuiTextField label = {label} type={type} variant='outlined'
-    >
-      exemplo
-    </MuiTextField>
+    />
   )
 }
 TextField.propTypes = {
