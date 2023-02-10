@@ -27,30 +27,33 @@ export function LoginBox () {
   })
 
   return (
-    <Grid
-      container
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-      spacing={1}
-      >
         <Formik
           initialValues={data}
           validationSchema={validacaoForm}
+          onSubmit={values => {
+            console.log(values)
+          }}
           >
             <Form>
-              <Grid item>
-                <TextField label='Email' type='email'/>
-              </Grid>
-              <Grid item>
-                <TextField label='Senha' type='password'/>
-              </Grid>
-              <Grid item>
-                <Button text='Login'></Button>
-              </Grid>
+            <Grid
+              container
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+              spacing={1}
+            >
+                <Grid item xs={6} >
+                  <TextField name='email' label='Email' type='email' />
+                </Grid>
+                <Grid item xs={6} >
+                  <TextField name='senha' label='Senha' type='password'/>
+                </Grid>
+                <Grid item>
+                  <Button text='Login'></Button>
+                </Grid>
+            </Grid>
           </Form>
         </Formik>
-      </Grid>
 
   )
 }

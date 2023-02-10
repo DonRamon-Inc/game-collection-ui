@@ -1,10 +1,17 @@
 import { Button as MuiButton } from '@mui/material'
 import { PropTypes } from 'prop-types'
+import { useFormikContext } from 'formik'
 
 export function Button ({ text, onClick, color }) {
+  const { submitForm } = useFormikContext()
+
+  const handleSubmit = () => {
+    submitForm()
+  }
+
   return (
     <MuiButton
-    onClick={onClick}
+    onClick={handleSubmit}
     variant="contained"
     color={color}
     >
